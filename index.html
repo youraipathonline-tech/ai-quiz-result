@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your AI Analysis</title>
+  <style>
+    :root {
+      --bg: #0d0d0d;
+      --panel: #151515;
+      --panel-2: #1c1c1c;
+      --gold: #c9a227;
+      --gold-light: #e5c85b;
+      --text: #f5f5f5;
+      --muted: #b3b3b3;
+      --border: rgba(229, 200, 91, 0.22);
+      --success: #f3d46a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(201,162,39,0.12), transparent 30%),
+        linear-gradient(180deg, #0b0b0b 0%, #111111 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 960px;
+    }
+
+    .top-line {
+      height: 6px;
+      width: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+      margin-bottom: 18px;
+      box-shadow: 0 0 25px rgba(201,162,39,0.22);
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 34px;
+      box-shadow: 0 18px 60px rgba(0,0,0,0.35);
+      backdrop-filter: blur(4px);
+    }
+
+    .eyebrow {
+      color: var(--gold-light);
+      font-size: 12px;
+      letter-spacing: 2.4px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(32px, 4vw, 50px);
+      line-height: 1.02;
+    }
+
+    .sub {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.55;
+      max-width: 760px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 22px;
+      margin-top: 28px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px;
+      padding: 22px;
+    }
+
+    .panel h2 {
+      margin: 0 0 16px 0;
+      font-size: 18px;
+      color: var(--gold-light);
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .row:last-child { border-bottom: 0; }
+
+    .label {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.4;
+      max-width: 220px;
+    }
+
+    .value {
+      text-align: right;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .blurred {
+      filter: blur(8px);
+      user-select: none;
+      pointer-events: none;
+      letter-spacing: 1px;
+    }
+
+    .hero-time {
+      background: linear-gradient(180deg, rgba(201,162,39,0.16), rgba(201,162,39,0.06));
+      border: 1px solid rgba(229,200,91,0.28);
+      border-radius: 22px;
+      padding: 24px;
+    }
+
+    .hero-time .mini {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--gold-light);
+      margin-bottom: 8px;
+    }
+
+    .hero-time .big {
+      font-size: clamp(34px, 5vw, 54px);
+      font-weight: 800;
+      line-height: 1;
+      margin: 8px 0 10px;
+    }
+
+    .hero-time .desc {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .cta {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      padding: 18px 22px;
+      border-radius: 16px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      color: #111111;
+      font-weight: 800;
+      font-size: 16px;
+      box-shadow: 0 10px 30px rgba(201,162,39,0.24);
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    .micro {
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .highlights {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .chip {
+      background: var(--panel-2);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 14px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .chip strong {
+      display: block;
+      color: var(--text);
+      font-size: 16px;
+      margin-top: 6px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 16px;
+      color: #8d8d8d;
+      font-size: 12px;
+    }
+
+    @media (max-width: 820px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 24px;
+      }
+
+      .highlights {
+        grid-template-columns: 1fr;
+      }
+
+      .value {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="top-line"></div>
+    <div class="card">
+      <div class="eyebrow">AI Analysis Complete</div>
+      <h1>Your result is ready.</h1>
+      <div class="sub">
+        We analyzed your answers and found the fastest realistic path based on your profile, time, and resources.
+      </div>
+
+      <div class="grid">
+        <div class="panel">
+          <h2>Your AI Snapshot</h2>
+
+          <div class="row">
+            <div class="label">Best Path</div>
+            <div id="bestPath" class="value blurred">Digital Services</div>
+          </div>
+
+          <div class="row">
+            <div class="label">Confidence Score</div>
+            <div id="confidenceScore" class="value">82%</div>
+          </div>
+
+          <div class="row">
+            <div class="label">Estimated time to first income</div>
+            <div id="timeToIncome" class="value">1–3 months</div>
+          </div>
+
+          <div class="highlights">
+            <div class="chip">
+              Result status
+              <strong>Ready</strong>
+            </div>
+            <div class="chip">
+              Full strategy
+              <strong>Locked</strong>
+            </div>
+            <div class="chip">
+              Delivery
+              <strong>PDF Report</strong>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="hero-time">
+            <div class="mini">Most Important Insight</div>
+            <div class="big" id="timeToIncomeHero">1–3 months</div>
+            <div class="desc">
+              Based on your profile, this is the estimated time frame to start seeing your first results if you follow the right path.
+            </div>
+          </div>
+
+          <div class="cta">
+            <a id="checkoutButton" class="button" href="#">Unlock My Full AI Plan</a>
+            <div class="micro">
+              Get your full personalized PDF with your exact business path, action plan, best ideas, mistakes to avoid, and next steps.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">Your AI Path</div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+
+    const bestPath = params.get('path') || 'Digital Services';
+    const confidence = params.get('confidence') || '82%';
+    const time = params.get('time') || '1–3 months';
+    const email = params.get('email') || '';
+    const name = params.get('name') || '';
+
+    document.getElementById('bestPath').textContent = bestPath;
+    document.getElementById('confidenceScore').textContent = confidence;
+    document.getElementById('timeToIncome').textContent = time;
+    document.getElementById('timeToIncomeHero').textContent = time;
+
+    const stripeLink = 'https://YOUR-STRIPE-LINK-HERE';
+    const checkoutButton = document.getElementById('checkoutButton');
+
+    const checkoutUrl = new URL(stripeLink);
+    if (email) checkoutUrl.searchParams.set('prefilled_email', email);
+    if (name) checkoutUrl.searchParams.set('client_reference_id', name);
+    if (bestPath) checkoutUrl.searchParams.set('path', bestPath);
+    if (confidence) checkoutUrl.searchParams.set('confidence', confidence);
+    if (time) checkoutUrl.searchParams.set('time', time);
+
+    checkoutButton.href = checkoutUrl.toString();
+  </script>
+</body>
+</html>

@@ -326,7 +326,7 @@
 
     const checkoutUrl = new URL(stripeLink);
     if (email) checkoutUrl.searchParams.set('prefilled_email', email);
-    if (name) checkoutUrl.searchParams.set('client_reference_id', name);
+    if (email) checkoutUrl.searchParams.set('client_reference_id', email);
     if (bestPath) checkoutUrl.searchParams.set('path', bestPath);
     if (confidence) checkoutUrl.searchParams.set('confidence', confidence);
     if (time) checkoutUrl.searchParams.set('time', time);
